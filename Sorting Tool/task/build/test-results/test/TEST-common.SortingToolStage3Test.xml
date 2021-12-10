@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="common.SortingToolStage3Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-03T01:12:15" hostname="DESKTOP-C5147BT" time="0.228">
+  <properties/>
+  <testcase name="start" classname="common.SortingToolStage3Test" time="0.228"/>
+  <system-out><![CDATA[?[1;31m
+Start test 1?[0m
+> 1 -2   33 4
+> 42
+> 1                 1
+Total numbers: 7
+?[1;31m
+Start test 2?[0m
+> 1 2 2 3 4 5 5
+Total numbers: 7
+?[1;31m
+Start test 3?[0m
+> 1 1 2 2 3 4 4 4
+Total numbers: 8
+?[1;31m
+Start test 4?[0m
+> 1 -2   333 4
+> 42
+> 1                 1
+Total words: 7
+?[1;31m
+Start test 5?[0m
+> abcc de a
+Total words: 3
+?[1;31m
+Start test 6?[0m
+> 1 -2   333 4
+> 42
+> 1                 1
+Total lines: 3
+The longest line:
+1                 1
+?[1;31m
+Start test 7?[0m
+> 1111
+> 22222
+> 3
+> 44
+Total lines: 4
+The longest line:
+22222
+?[1;31m
+Start test 8?[0m
+> 1 -2   333 4
+> 42
+> 1                 1
+Total numbers: 7.
+Sorted data: -2 1 1 1 4 42 333
+?[1;31m
+Start test 9?[0m
+> 1 -2   333 4
+> 42
+> 1                 1
+Total numbers: 7.
+Sorted data: -2 1 1 1 4 42 333
+?[1;31m
+Start test 10?[0m
+> 1111
+> 22222
+> 3
+> 44
+Total numbers: 4.
+Sorted data: 3 44 1111 22222
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

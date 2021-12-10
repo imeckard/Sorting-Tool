@@ -1,0 +1,765 @@
+type: edu
+custom_name: stage3
+files:
+- name: src/sorting/Main.java
+  visible: true
+  text: "package sorting;\n\nimport java.util.*;\n\npublic class Main {\n    public\
+    \ static void main(final String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\
+    \n        String dataType = \"word\";\n        Sorter sorter = null;\n       \
+    \ ArrayList<String> dataTypeOptions = new ArrayList<>(Arrays.asList(\"word\",\
+    \ \"long\", \"line\"));\n        \n        for (int i = 0; i < args.length; i++)\
+    \ {\n            if (args[i].equals(\"-dataType\")) {\n                dataType\
+    \ = args[i + 1];\n            }\n        }\n        \n        switch (dataType)\
+    \ {\n            case \"word\":\n                sorter = new SorterWord();\n\
+    \                break;\n            case \"line\":\n                sorter =\
+    \ new SorterLine();\n                break;\n            case \"long\":\n    \
+    \            sorter = new SorterLong();\n                break;\n            default:\n\
+    \                sorter = new SorterWord();\n                System.out.println(\"\
+    DataType argument was missing???\");\n        }\n\n\n        sorter.createList();\n\
+    \        sorter.printSortedStats();\n\n    }\n\n}\n"
+  learner_created: false
+- name: src/sorting/Sorter.java
+  visible: true
+  text: |-
+    package sorting;
+
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.Scanner;
+
+    import static java.util.Collections.*;
+
+    public interface Sorter {
+        Scanner scan = new Scanner(System.in);
+
+        public void createList();
+
+        public void setList(List input);
+
+        public List getSortableList();
+
+        public <E> E getLargest();
+
+        public int getNumberOfRepeats();
+
+        public default int getRepeatPercentage() {
+            double percent = (double) getNumberOfRepeats() / (double) getSortableList().size();
+            return (int) Math.round(percent * 100);
+        }
+
+        public void printSortedStats();
+
+    }
+
+    class SorterWord implements Sorter {
+
+        public static List<String> sortableList = new ArrayList<>(0);
+
+        @Override
+        public void createList() {
+            while (scan.hasNext()) {
+                sortableList.add(scan.next());
+            }
+            sort(sortableList);
+        }
+
+        @Override
+        public void setList(List input) {
+            sortableList = input;
+        }
+
+        @Override
+        public List getSortableList() {
+            return sortableList;
+        }
+
+        @Override
+        public String getLargest() {
+            String largest = sortableList.get(0);
+            for (String str : sortableList) {
+                if (!largest.equals(str) && largest.length() < str.length()) {
+                    largest = str;
+                }
+            }
+            return largest;
+        }
+
+        @Override
+        public int getNumberOfRepeats() {
+            String largest = getLargest();
+            int count = 0;
+            for (String str : sortableList) {
+                if (largest.equals(str)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        @Override
+        public void printSortedStats() {
+            System.out.printf("Total words: %d", sortableList.size());
+            System.out.printf("\nThe longest word: %s (%d time(s), %d%%)",
+                    getLargest(), getNumberOfRepeats(), getRepeatPercentage());
+        }
+    }
+
+    class SorterLine implements Sorter {
+
+        public static List<String> sortableList = new ArrayList<>(0);
+
+        @Override
+        public void createList() {
+            while (scan.hasNextLine()) {
+                sortableList.add(scan.nextLine());
+            }
+            sort(sortableList);
+        }
+
+        @Override
+        public void setList(List input) {
+            sortableList = input;
+        }
+
+        @Override
+        public List getSortableList() {
+            return sortableList;
+        }
+
+        @Override
+        public String getLargest() {
+            String largest = sortableList.get(0);
+            for (String str : sortableList) {
+                if (!largest.equals(str) && largest.length() < str.length()) {
+                    largest = str;
+                }
+            }
+            return largest;
+        }
+
+        @Override
+        public int getNumberOfRepeats() {
+            String largest = getLargest();
+            int count = 0;
+            for (String str : sortableList) {
+                if (largest.equals(str)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        @Override
+        public void printSortedStats() {
+            System.out.printf("Total lines: %d", sortableList.size());
+            System.out.print("\nThe longest line:\n");
+            System.out.println(getLargest());
+            System.out.printf("(%d time(s), %d%%)", getNumberOfRepeats(), getRepeatPercentage());
+        }
+    }
+
+    class SorterLong implements Sorter {
+
+        public static List<Long> sortableList = new ArrayList<>(0);
+
+        @Override
+        public void createList() {
+            while (scan.hasNextLong()) {
+                sortableList.add(scan.nextLong());
+            }
+            sort(sortableList);
+        }
+
+        @Override
+        public void setList(List input) {
+            sortableList = input;
+        }
+
+        @Override
+        public List getSortableList() {
+            return sortableList;
+        }
+
+        @Override
+        public Long getLargest() {
+            return sortableList.get(sortableList.size() - 1);
+        }
+
+        @Override
+        public int getNumberOfRepeats() {
+            Long largest = getLargest();
+            int count = 0;
+            for (Long num : sortableList) {
+                if (largest == num) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        @Override
+        public void printSortedStats() {
+            System.out.printf("Total numbers: %d", sortableList.size());
+            System.out.printf("\nThe greatest number: %d (%d time(s), %d%%)",
+                    getLargest(), getNumberOfRepeats(), getRepeatPercentage());
+        }
+    }
+  learner_created: false
+- name: test/common/SortingToolStage3Test.kt
+  visible: false
+  text: |
+    package common
+
+    import org.hyperskill.hstest.stage.StageTest
+    import org.hyperskill.hstest.testcase.CheckResult
+    import org.hyperskill.hstest.testcase.TestCase
+    import org.hyperskill.hstest.testing.Settings
+    import java.util.*
+    import kotlin.math.roundToInt
+
+    class SortingToolStage3Test : StageTest<SortingToolClue>() {
+
+        init {
+            Settings.allowOutOfInput = true
+        }
+
+        override fun generate(): List<TestCase<SortingToolClue>> {
+            return stage1Tests() + stage2Tests() + stage3Tests()
+        }
+
+        override fun check(reply: String, clue: SortingToolClue): CheckResult {
+            return when {
+                "-sortIntegers" in clue.args -> checkNatural(
+                        parseLongTokens(clue.consoleInput),
+                        ::parseLongTokens,
+                        clue,
+                        reply
+                )
+
+                "long" in clue.args -> checkForLong(clue, reply)
+                "word" in clue.args -> checkForWord(clue, reply)
+                "line" in clue.args -> checkForLine(clue, reply)
+
+                else -> throw IllegalArgumentException("Bad test: no data type found")
+            }
+        }
+    }
+
+    fun stage1Tests(): List<TestCase<SortingToolClue>> {
+        return listOf(
+                createTest(
+                        """
+                    |1 -2   33 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                        true
+                ),
+                createTest("1 2 2 3 4 5 5", true),
+                createTest("1 1 2 2 3 4 4 4", false)
+        )
+    }
+
+
+    fun stage2Tests(): List<TestCase<SortingToolClue>> {
+        return listOf(
+                createTest(
+                        """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                        true,
+                        "-dataType", "word"
+                ),
+                createTest(
+                        """abcc de a""".trimMargin(),
+                        false,
+                        "-dataType", "word"
+                ),
+                createTest(
+                        """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                        true,
+                        "-dataType", "line"
+                ),
+                createTest(
+                        """
+                    |1111
+                    |22222
+                    |3
+                    |44
+                    """.trimMargin(),
+                        false,
+                        "-dataType", "line"
+                )
+        )
+    }
+
+
+    fun stage3Tests(): List<TestCase<SortingToolClue>> {
+        return listOf(
+                createTest(
+                        """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                        true,
+                        "-dataType", "word", "-sortIntegers"
+                ),
+                createTest(
+                        """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                        true,
+                        "-sortIntegers"
+                ),
+                createTest(
+                        """
+                    |1111
+                    |22222
+                    |3
+                    |44
+                    """.trimMargin(),
+                        false,
+                        "-sortIntegers", "-dataType", "line"
+                )
+        )
+    }
+
+
+
+    fun revealRawTest(clue: SortingToolClue, reply: String): String {
+        return with(clue) { "Args:\n${args.joinToString(" ")}\nInput:\n$consoleInput\nYour output:\n$reply\n\n" }
+    }
+
+    class SortingToolClue(val consoleInput: String, val revealTest: Boolean, val args: List<String>)
+
+    fun createTest(
+            consoleInput: String,
+            revealTest: Boolean,
+            vararg args: String = arrayOf("-dataType", "long")
+    ): TestCase<SortingToolClue> {
+        return TestCase<SortingToolClue>()
+                .setAttach(SortingToolClue(consoleInput, revealTest, args.toList()))
+                .setInput(consoleInput)
+                .addArguments(*args)
+    }
+
+    fun checkForLong(clue: SortingToolClue, reply_: String): CheckResult {
+        val reply = reply_.trim()
+        val regex = """(\d+)\D+(\d+)\D+(\d+)""".toRegex()
+        val matchResult = regex.find(reply)
+        if (matchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't parse your output. Please check if your output contains three numbers\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't parse your output.")
+            }
+        }
+
+        val (totalNumbers, greatestNumber, greatestNumberCount) = matchResult.groupValues.drop(1).map { it.toInt() }
+
+        val scanner = Scanner(clue.consoleInput)
+
+        val actualNumbers = mutableListOf<Int>()
+
+        while (scanner.hasNextInt()) {
+            actualNumbers.add(scanner.nextInt())
+        }
+
+        val actualTotal = actualNumbers.size
+
+        if (actualTotal != totalNumbers) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Total numbers ($totalNumbers) are incorrect. Expected: $actualTotal.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total numbers are incorrect.")
+            }
+        }
+
+        val actualMax = actualNumbers.maxOrNull()
+
+        if (actualMax != greatestNumber) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Greatest number ($greatestNumber) is incorrect. Expected: $actualMax.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Greatest number is incorrect.")
+            }
+        }
+
+        val actualMaxCount = actualNumbers.count { it == actualMax }
+
+        if (actualMaxCount != greatestNumberCount) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Greatest number times ($greatestNumberCount) are incorrect. Expected: $actualMaxCount.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Greatest number times are incorrect.")
+            }
+        }
+
+        return CheckResult(true)
+    }
+
+    fun checkForWord(clue: SortingToolClue, reply_: String): CheckResult {
+        val reply = reply_.trim()
+        val regex = """(\d+)\D+: (.+) \(\D*(\d+)\D+(\d+)\D*\)""".toRegex()
+        val matchResult = regex.find(reply)
+        if (matchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't parse your output.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't parse your output.")
+            }
+        }
+
+        val totalWords = matchResult.groupValues[1].toInt()
+        val word = matchResult.groupValues[2]
+        val longestWordCount = matchResult.groupValues[3].toInt()
+        val longestWordPercentage = matchResult.groupValues[4].toInt()
+
+        val scanner = Scanner(clue.consoleInput)
+
+        val actualWords = mutableListOf<String>()
+
+        while (scanner.hasNext()) {
+            actualWords.add(scanner.next())
+        }
+
+        val actualTotal = actualWords.size
+
+        if (actualTotal != totalWords) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Total words ($totalWords) are incorrect. Expected: $actualTotal.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total words are incorrect.")
+            }
+        }
+
+        val actualMax = actualWords.maxByOrNull { it.length }
+
+        if (actualMax != word) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Longest word ($word) is incorrect. Expected: $actualMax.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Longest word is incorrect.")
+            }
+        }
+
+        val actualMaxCount = actualWords.count { it == actualMax }
+
+        if (actualMaxCount != longestWordCount) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Longest word times ($longestWordCount) are incorrect. Expected: $actualMaxCount.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Longest word times are incorrect.")
+            }
+        }
+
+        val actualPercentage = (actualMaxCount * 100.0 / actualTotal).roundToInt()
+
+        if (actualPercentage != longestWordPercentage) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Percentage ($longestWordPercentage) is incorrect. Expected: $actualPercentage.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Percentage is incorrect.")
+            }
+        }
+
+        return CheckResult(true)
+    }
+
+    fun checkForLine(clue: SortingToolClue, reply_: String): CheckResult {
+        val reply = reply_.trim()
+        val lines = reply.lines()
+
+        if (lines.size != 4) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't parse your output: expected 4 lines.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't parse your output: expected 4 lines.")
+            }
+        }
+
+        val totalRegex = """(\d+)""".toRegex()
+        val totalMatchResult = totalRegex.find(lines[0])
+        if (totalMatchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't find number in the first line of your output.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't find number in the first line of your output.")
+            }
+        }
+
+        val totalLines = totalMatchResult.groupValues[1].toInt()
+        val line = lines[2]
+
+        val countRegex = """(\d+)\D+(\d+)""".toRegex()
+        val countMatchResult = countRegex.find(lines[3])
+        if (countMatchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't find two numbers in the last line of your output.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't find two numbers in the last line of your output.")
+            }
+        }
+
+        val longestWordCount = countMatchResult.groupValues[1].toInt()
+        val longestWordPercentage = countMatchResult.groupValues[2].toInt()
+
+        val actualLines = clue.consoleInput.lines()
+
+        val actualTotal = actualLines.size
+
+        if (actualTotal != totalLines) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Total lines ($totalLines) are incorrect. Expected: $actualTotal.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total lines are incorrect.")
+            }
+        }
+
+        val actualMax = actualLines.maxByOrNull { it.length }
+
+        if (actualMax != line) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Longest line ($line) is incorrect. Expected: $actualMax.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Longest line is incorrect.")
+            }
+        }
+
+        val actualMaxCount = actualLines.count { it == actualMax }
+
+        if (actualMaxCount != longestWordCount) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Longest line times ($longestWordCount) are incorrect. Expected: $actualMaxCount.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Longest line times are incorrect.")
+            }
+        }
+
+        val actualPercentage = (actualMaxCount * 100.0 / actualTotal).roundToInt()
+
+        if (actualPercentage != longestWordPercentage) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Percentage ($longestWordPercentage) is incorrect. Expected: $actualPercentage.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Percentage is incorrect.")
+            }
+        }
+
+        return CheckResult(true)
+    }
+
+    fun parseLongTokens(input: String): List<Int> {
+        val scanner = Scanner(input)
+
+        val longTokens = mutableListOf<Int>()
+
+        while (scanner.hasNextInt()) {
+            longTokens.add(scanner.nextInt())
+        }
+
+        return longTokens
+    }
+
+    fun <TokenType : Comparable<TokenType>> checkNatural(
+            actualTokens: List<TokenType>,
+            sortedTokensParser: (String) -> List<TokenType>,
+            clue: SortingToolClue,
+            reply_: String
+    ): CheckResult {
+        val reply = reply_.trim()
+        val lines = reply.lines()
+
+        if (lines.size != 2) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't parse your output: expected 2 lines.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't parse your output: expected 2 lines.")
+            }
+        }
+
+        val totalRegex = """(\d+)""".toRegex()
+        val totalMatchResult = totalRegex.find(lines[0])
+        if (totalMatchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Can't find number in the first line of your output.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't find number in the first line of your output.")
+            }
+        }
+
+        val totalTokens = totalMatchResult.groupValues[1].toInt()
+
+        val actualTotal = actualTokens.size
+
+        if (actualTotal != totalTokens) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Total tokens ($totalTokens) are incorrect. Expected: $actualTotal.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total tokens are incorrect.")
+            }
+        }
+
+        val sortedActualTokens = actualTokens.sorted()
+
+        val sortedTokens = sortedTokensParser(lines[1].substringAfter(":").dropWhile { it in setOf('\n', '\r') })
+
+        val total = sortedTokens.size
+
+        if (actualTotal != total) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Total sorted tokens ($total) are incorrect. Expected: $actualTotal.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total sorted tokens are incorrect.")
+            }
+        }
+
+        if (sortedActualTokens != sortedTokens) {
+            return if (clue.revealTest) {
+                CheckResult(
+                        false,
+                        "Sorted tokens are incorrect.\n" +
+                                revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Sorted tokens are incorrect.")
+            }
+        }
+
+        return CheckResult(true)
+    }
+  learner_created: false
+- name: test/sorting/MainTest.java
+  visible: true
+  text: |
+    /*
+    package sorting;
+
+    import junit.framework.TestCase;
+    import org.junit.Assert;
+    import org.junit.Test;
+
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.List;
+
+    public class MainTest {
+
+        List<Long> input = new ArrayList<Long>(Arrays.asList(15L, -3L, 0L, 42L, 42L, 6L, -100L, 42L, 15L));
+        Long highest = 42L;
+
+
+        @Test
+        public void shouldCountNumbers() {
+            Assert.assertEquals(9, Main.countTotalNumbers(input));
+        }
+
+        @Test
+        public void shouldReturnHighest() {
+            Assert.assertEquals(highest, Main.findHighestNumber(input));
+        }
+
+        @Test
+        public void shouldCountHighests() {
+            Assert.assertEquals(3, Main.countHighestNumbers(input, highest) );
+        }
+
+
+
+    }*/
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/45/stages/241/implement#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Fri, 03 Dec 2021 01:12:16 UTC
+record: 2
