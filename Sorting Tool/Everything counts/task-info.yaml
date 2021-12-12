@@ -584,6 +584,81 @@ files:
 
 
   learner_created: false
+- name: test/sorting/MainTest.java
+  visible: true
+  text: |
+    /*
+    package sorting;
+
+    import junit.framework.TestCase;
+    import org.junit.Assert;
+    import org.junit.Test;
+
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.List;
+
+    public class MainTest {
+
+        List<Long> input = new ArrayList<Long>(Arrays.asList(15L, -3L, 0L, 42L, 42L, 6L, -100L, 42L, 15L));
+        Long highest = 42L;
+
+
+        @Test
+        public void shouldCountNumbers() {
+            Assert.assertEquals(9, Main.countTotalNumbers(input));
+        }
+
+        @Test
+        public void shouldReturnHighest() {
+            Assert.assertEquals(highest, Main.findHighestNumber(input));
+        }
+
+        @Test
+        public void shouldCountHighests() {
+            Assert.assertEquals(3, Main.countHighestNumbers(input, highest) );
+        }
+
+
+
+    }*/
+  learner_created: false
 feedback_link: https://hyperskill.org/projects/45/stages/242/implement#comment
 status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #3
+
+    Token (333) is incorrect. Expected: 4.
+    Args:
+    -sortingType byCount -dataType long
+    Input:
+    1 -2   333 4
+    42
+    1                 1
+    Your output:
+    Total numbers: 7.
+    -2: 1 time(s), 14%
+    333: 1 time(s), 14%
+    4: 1 time(s), 14%
+    42: 1 time(s), 14%
+    1: 3 time(s), 43%
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    Arguments: -sortingType byCount -dataType long
+
+    &gt; 1 -2   333 4
+    &gt; 42
+    &gt; 1                 1
+    Total numbers: 7.
+    -2: 1 time(s), 14%
+    333: 1 time(s), 14%
+    4: 1 time(s), 14%
+    42: 1 time(s), 14%
+    1: 3 time(s), 43%
+  time: Sun, 12 Dec 2021 17:48:37 UTC
 record: 3

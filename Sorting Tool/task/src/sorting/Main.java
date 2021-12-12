@@ -6,20 +6,16 @@ public class Main {
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String dataType = "word";
+        String dataType = "none";
 
-        String command = "info";
+        String command = "natural";
 
         Sorter sorter = null;
-
-        ArrayList<String> dataTypeOptions = new ArrayList<>(Arrays.asList("word", "long", "line"));
         
         for (int i = 0; i < args.length; i++) {
 
-            if (args[i].equals("-sortIntegers")) {
-                dataType = "long";
-                command = "sort";
-                break;
+            if (args[i].equals("-sortingType")) {
+                command = args[i + 1];
             }
 
             if (args[i].equals("-dataType")) {
@@ -43,18 +39,15 @@ public class Main {
         }
 
 
-
         sorter.createList();
-        sorter.printSortedStats();
 
-        sorter.createList();
 
         switch (command) {
-            case "info":
-                sorter.printArrayInfo();
+            case "natural":
+                sorter.printNaturalSort();
                 break;
-            case "sort":
-                sorter.printSortedStats();
+            case "byCount":
+                sorter.printByCountSort();
                 break;
             default:
                 sorter.printArrayInfo();
